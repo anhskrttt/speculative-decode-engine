@@ -1,6 +1,7 @@
 import time
 import torch
 import matplotlib.pyplot as plt
+from datetime import datetime
 from engine import SpeculativeEngine
 
 import os
@@ -62,34 +63,68 @@ def run_gamma_experiment():
     print("✅ Experiment Complete. Generating Graph...")
 
     # graph
-    plt.figure(figsize=(10, 5))
+    # plt.figure(figsize=(10, 5))
 
-    # Subplot 1: Speed vs Gamma
-    plt.subplot(1, 2, 1)
-    plt.plot(gammas, speeds, marker='o', color='b', linewidth=2)
-    plt.title("Speed vs. Draft Length (Gamma)")
-    plt.xlabel("Gamma (Draft Tokens)")
-    plt.ylabel("Tokens / Second")
-    plt.grid(True)
+    # # Subplot 1: Speed vs Gamma
+    # plt.subplot(1, 2, 1)
+    # plt.plot(gammas, speeds, marker='o', color='b', linewidth=2)
+    # plt.title("Speed vs. Draft Length (Gamma)")
+    # plt.xlabel("Gamma (Draft Tokens)")
+    # plt.ylabel("Tokens / Second")
+    # plt.grid(True)
 
-    # Subplot 2: Acceptance Rate vs Gamma
-    plt.subplot(1, 2, 2)
-    plt.plot(gammas, acceptance_rates, marker='o', color='g', linewidth=2)
-    plt.title("Acceptance Rate vs. Gamma")
-    plt.xlabel("Gamma (Draft Tokens)")
-    plt.ylabel("Acceptance Rate (%)")
-    plt.grid(True)
+    # # Subplot 2: Acceptance Rate vs Gamma
+    # plt.subplot(1, 2, 2)
+    # plt.plot(gammas, acceptance_rates, marker='o', color='g', linewidth=2)
+    # plt.title("Acceptance Rate vs. Gamma")
+    # plt.xlabel("Gamma (Draft Tokens)")
+    # plt.ylabel("Acceptance Rate (%)")
+    # plt.grid(True)
 
+    # plt.tight_layout()
+    
+    # Single graph
+    fig, ax_speed = plt.subplots(figsize=(10, 5))
+
+    # Left y-axis: speed
+    speed_line = ax_speed.plot(
+        gammas, speeds,
+        marker="o", color="tab:blue", linewidth=2,
+        label="Speed (tokens/s)"
+    )
+    ax_speed.set_xlabel("Gamma (Draft Tokens)")
+    ax_speed.set_ylabel("Tokens / Second", color="tab:blue")
+    ax_speed.tick_params(axis="y", labelcolor="tab:blue")
+    ax_speed.grid(True, alpha=0.3)
+
+    # Right y-axis: acceptance rate
+    ax_acceptance = ax_speed.twinx()
+    acceptance_line = ax_acceptance.plot(
+        gammas, acceptance_rates,
+        marker="s", color="tab:green", linewidth=2,
+        label="Acceptance Rate (%)"
+    )
+    ax_acceptance.set_ylabel("Acceptance Rate (%)", color="tab:green")
+    ax_acceptance.tick_params(axis="y", labelcolor="tab:green")
+    ax_acceptance.set_ylim(0, 100)
+
+    # Combine the two legends
+    lines = speed_line + acceptance_line
+    labels = [line.get_label() for line in lines]
+    ax_speed.legend(lines, labels, loc="best")
+
+    plt.title("Speculative Decoding: Speed and Acceptance Rate vs. Gamma")
     plt.tight_layout()
+    
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    os.makedirs("results", exist_ok=True)
+    graph_path = f"results/gamma_analysis_{timestamp}.png"
+    plt.savefig(graph_path)
+    print(f"\n📊 Graph saved to: {graph_path}")
 
-    import os
-    os.makedirs("results", exist_ok=True)  
-    plt.savefig("results/gamma_analysis.png") 
-    print(f"\n📊 Graph saved to: results/gamma_analysis.png")
-    
     hardware = get_hardware_info()
-    
-    results_path = "results/gamma_results.csv"
+
+    results_path = f"results/gamma_results_{timestamp}.csv"
     with open(results_path, "w", encoding="utf-8") as file:
         file.write("hardware,gamma,tokens_per_second,acceptance_rate_percent\n")
 

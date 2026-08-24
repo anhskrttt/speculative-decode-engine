@@ -6,7 +6,7 @@ Autoregressive decoding normally emits one token per expensive target-model forw
 
 ## Status
 
-**In progress.**
+**In progress...**
 
 Implemented / running:
 
@@ -14,6 +14,7 @@ Implemented / running:
 - Throughput and draft acceptance-rate reporting.
 
 Planned extensions:
+- Auto tuning gamma for each architecture.
 - GPU profiling data.
 - GPU-synchronized timing, warm-up.
 - Peak-VRAM, draft-time, and target-verification-time measurements.
@@ -86,16 +87,10 @@ results/gamma_results.csv
 
 ## Results
 
-TBD
+- The longer draft assistant's proposed squence, the worse performance (for both TPS and acceptance rate). TODO: Is there any solution?
+- Average improvement is only aroun ~1.1x (not really significant). TODO: Why? How does it perform on different accelerators?
 
 ![Gamma analysis](results/gamma_analysis.png)
-
-## Limitations and next steps
-
-- The prototype is a research/learning implementation, not a production serving engine.
-- Stochastic output equality is not the right correctness criterion: two independent samples may differ even when both follow the same target distribution.
-- The next optimization is KV-cache-aware draft generation, followed by a before/after profile to determine whether it changes the optimal gamma.
-- Future work: continuous batching, cache management, and comparison with an optimized engine such as vLLM.
 
 ## References and attribution
 

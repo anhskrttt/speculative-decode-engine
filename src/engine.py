@@ -88,7 +88,8 @@ class SpeculativeEngine:
         # 1. Tokenize 
         input_ids = self.tokenizer(prompt, return_tensors="pt").to(self.device).input_ids
         
-        # 2. Start Timer 
+        # TODO: Reassess this calculation 
+        # 2. Start Timer
         start_time = time.time()
         
         num_generated = 0
