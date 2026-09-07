@@ -4,16 +4,12 @@ import torch
 # We use a large "Target" model and a small "Draft" model.
 # They MUST share the same tokenizer for this to work easily.
 # TARGET_MODEL_NAME = "facebook/opt-1.3b" 
-TARGET_MODEL_NAME = "Qwen/Qwen2.5-1.5B" 
-DRAFT_MODEL_NAME  = "Qwen/Qwen2.5-0.5B"
-
-# TARGET_MODEL_NAME = "distilgpt2" 
-# DRAFT_MODEL_NAME  = "gpt2-large"
+TARGET_MODEL_NAME = "facebook/opt-1.3b" 
+DRAFT_MODEL_NAME  = "facebook/opt-125m"
 
 '''
 Supported models
 Draft Models (small, fast):
-
     facebook/opt-125m (125M params - 753MB) ⭐ Recommended
     gpt2 (124M params)
     distilgpt2 (82M params)

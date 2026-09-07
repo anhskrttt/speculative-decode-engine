@@ -225,7 +225,7 @@ def run_gamma_experiment(max_tokens: int, max_gamma: int):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run gamma sweep experiment")
     parser.add_argument("--max-tokens", type=int, default=40, help="Maximum number of tokens to generate")
-    parser.add_argument("--max-gamma", type=int, default=20, help="Maximum gamma value to test")
+    parser.add_argument("--max-gamma", type=int, default=10, help="Maximum gamma value to test")
     args = parser.parse_args()
     
     if args.max_tokens <= 0:
