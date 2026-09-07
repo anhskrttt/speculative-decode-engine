@@ -2,14 +2,13 @@
 
 ## Goal
 
-Autoregressive decoding normally emits one token per expensive target-model forward pass. Speculative decoding uses a smaller **draft model** to propose a short continuation, then uses one **target-model verification forward pass** to score every proposed position. If sufficient proposals are accepted, the target produces multiple output tokens per call without changing its intended distribution.
+Autoregressive decoding normally emits one token per expensive target-model forward pass. Speculative decoding uses a smaller draft model to propose a short continuation, then uses one target-model verification forward pass to score every proposed position. If sufficient proposals are accepted, the target produces multiple output tokens per call without changing its intended distribution.
 
 ## Status
 
 **In progress...**
 
 Implemented / running:
-
 - Draft-token generation and batched target verification.
 - Throughput and draft acceptance-rate reporting.
 
@@ -21,30 +20,72 @@ Planned extensions:
 - Greedy token-ID equality tests against target-only decoding.
 - KV-cache-aware draft generation and before/after profiling.
 
+Questions:
+- [ ] Why running comparison (baseline vs. SD) only good results for first several requests? (After that, SD is worse than baseline).
+    - The gap size of model target and model draft is too small
+    - ~~Testing sequence length is too short~~ (Tested with longer sequence length, still worse than baseline)
+    - Timing calculation logic may be a problem
+        - NOTE(anhduong): can use normal timing when launch on cpu, but once it's on gpu, the timing is not accurate because of async execution. Need to use `torch.cuda.synchronize()` before and after the timing.
+- [ ]
+
+
+## Performance Benchmarks
+
+| Hardware      | Target / Draft pair |      Method | Throughput (tok/s) | Mean latency (ms/token) | Speedup | Acceptance rate |  γ |
+| -------- | ------------------- | ----------: | -----------------: | ----------------------: | ------: | --------------: | -: |
+| RTX 4090 | opt-1.3b / 125m |    Baseline |                  … |                       … |   1.00× |               N/A |  — |
+| RTX 4090 | opt-1.3b / 125m | Speculative |                  … |                       … |      …× |              …% |  4 |
+| RTX 5090 | Qwen2.5-1.5B / 0.5B |    Baseline |                  … |                       … |      …× |              N/A |  4 |
+| RTX 5090 | Qwen2.5-1.5B / 0.5B |    Speculative |                  … |                       … |      …× |              …% |  4 |
+<!-- | RTX 4090 | Qwen2.5-1.5B / 0.5B |    Baseline |                  … |                       … |   1.00× |               — |  — |
+| RTX 4090 | Qwen2.5-1.5B / 0.5B | Speculative |                  … |                       … |      …× |              …% |  4 | -->
+
+
+## Performance Breakdown
+[Results](https://docs.google.com/spreadsheets/d/14b2Z0n4x0WGTn8ngUaHWemA8xh2Dzb-XaoCjBVBDvbA/edit?usp=sharing)
+- Bottleneck is currently matmul in Attention op. This is pretty obvious since there's no KV cache implementation yet.
 
 ## Benchmark methodology
 
 ### Hardware and model configuration
+#### Accelerator / GPU
+I tested on two different NVIDIA GPUs
+- NVIDIA GeForce RTX 4090, 24 GB VRAM
+- NVIDIA GeForce RTX 5090, 24 GB VRAM
+- Models (The draft and target models must share a tokenizer and vocabulary. Use models in the same family.)
+    - Draft:
+        - 
+        - 
+    - Target:
+        - 
+        - 
 
-| Item | Configuration |
-|---|---|
-| GPU | NVIDIA GeForce RTX 4090, 24 GB VRAM |
-| Target model | `facebook/opt-1.3b` (default; configurable) |
-| Draft model | `facebook/opt-125m` (default; configurable) |
-| Precision | FP16 recommended on CUDA |
-| Workload | Fixed prompt and fixed generated-token budget |
 
-The draft and target models must share a tokenizer and vocabulary. Use models in the same family.
+
 
 ## Quick start
 
 ```bash
-git clone 
+git clone git@github.com:anhskrttt/speculative-decode-engine.git
 cd speculative-decoding-benchmark
 
+# Use python built-in virtual env manager
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+
+# Or use uv
+uv sync
+uv run python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
+```
+
+Test:
+
+```bash
+python main.py
+
+# OR
+uv run src/python main.py
 ```
 
 Run a baseline-versus-speculative comparison:
@@ -52,6 +93,9 @@ Run a baseline-versus-speculative comparison:
 ```bash
 cd src
 python compare.py --gamma 4 --max-new-tokens 40
+
+# OR
+uv run python src/compare.py --gamma 4 --max-new-tokens 40
 ```
 
 Run the gamma sweep:

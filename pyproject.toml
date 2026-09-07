@@ -1,0 +1,11 @@
+[project]
+name = "speculative-decode-engine"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "accelerate>=1.14.0",
+    "matplotlib>=3.11.1",
+    "numpy>=2.5.2",
+    "torch>=2.14.0",
+    "transformers>=5.16.1",
+]

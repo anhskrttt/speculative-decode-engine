@@ -5,13 +5,21 @@ from engine import SpeculativeEngine
 from baseline import BaselineGenerator
 
 def run_race(prompts, max_new_tokens=40, gamma=4):
+    baseline = BaselineGenerator()
+    speculative = SpeculativeEngine()
+    
+    # Warm up
+    warmup_prompt="The secret to happiness is"
+    
+    baseline.generate(warmup_prompt, max_new_tokens=10)
+    speculative.generate(warmup_prompt, max_new_tokens=10, gamma=4)
+    torch.cuda.synchronize()
+    
+    # Real run
     print(f"\n{'='*60}")
     print(f"  THE RACE: Baseline vs. Speculative (Gamma={gamma})")
     print(f"{'='*60}")
 
-    baseline = BaselineGenerator()
-    speculative = SpeculativeEngine()
-    
     results = []
 
     for i, prompt in enumerate(prompts):
