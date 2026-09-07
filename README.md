@@ -21,12 +21,12 @@ Planned extensions:
 - KV-cache-aware draft generation and before/after profiling.
 
 Questions:
-- [ ] Why running comparison (baseline vs. SD) only good results for first several requests? (After that, SD is worse than baseline).
+- [ ] Why currently SS is worst than baseline? (Tested with gamma=4, max_new_tokens=[40, 100])
     - The gap size of model target and model draft is too small
     - ~~Testing sequence length is too short~~ (Tested with longer sequence length, still worse than baseline)
     - Timing calculation logic may be a problem
         - NOTE(anhduong): can use normal timing when launch on cpu, but once it's on gpu, the timing is not accurate because of async execution. Need to use `torch.cuda.synchronize()` before and after the timing.
-- [ ]
+<!-- - [ ] Why this is not efficient using GPU?  -->
 
 
 ## Performance Benchmarks
@@ -59,9 +59,6 @@ I tested on two different NVIDIA GPUs
     - Target:
         - 
         - 
-
-
-
 
 ## Quick start
 
@@ -98,7 +95,8 @@ python compare.py --gamma 4 --max-new-tokens 40
 uv run python src/compare.py --gamma 4 --max-new-tokens 40
 ```
 
-Run the gamma sweep:
+Run the gamma sweep: By running experiments.py, choose the most efficient gamma.
+TODO(anhduong): Auto choose (auto-tune) the best gamma for each model pair / architecture. 
 
 ```bash
 python experiments.py
@@ -111,7 +109,7 @@ results/gamma_analysis.png
 results/gamma_results.csv
 ```
 
-## Project structure
+<!-- ## Project structure
 
 ```text
 .
@@ -127,18 +125,19 @@ results/gamma_results.csv
 └── results/
     ├── gamma_analysis.png
     └── gamma_results.csv
-```
+``` -->
 
 ## Results
 
-- The longer draft assistant's proposed squence, the worse performance (for both TPS and acceptance rate). TODO: Is there any solution?
-- Average improvement is only aroun ~1.1x (not really significant). TODO: Why? How does it perform on different accelerators?
+<!-- - The longer draft assistant's proposed squence, the worse performance (for both TPS and acceptance rate). TODO: Is there any solution? -->
+<!-- - Average improvement is only aroun ~1.1x (not really significant). TODO: Why? How does it perform on different accelerators? -->
 
-![Gamma analysis](results/gamma_analysis.png)
+<!-- ![Gamma analysis](results/gamma_analysis.png) -->
+![Gamma analysis](results/gamma_analysis_2026-09-07.png)
 
 ## References and attribution
 
 - Leviathan, Kalman, and Matias. [Fast Inference from Transformers via Speculative Decoding](https://arxiv.org/abs/2211.17192).
 - Chen et al. [Accelerating Large Language Model Decoding with Speculative Sampling](https://arxiv.org/abs/2302.01318).
 - Hugging Face. [Assisted Generation](https://huggingface.co/blog/assisted-generation).
-- The initial educational implementation was informed by [kunal51107/Speculative-decoding-engine](https://github.com/kunal51107/Speculative-decoding-engine). This repository extends that starting point with a reproducible consumer-GPU benchmark and cache-aware optimization study.
+- The initial educational implementation was informed by [kunal51107/Speculative-decoding-engine](https://github.com/kunal51107/Speculative-decoding-engine). This repository extends that starting point with a testing on GPUs, profiling, and a gamma sweep.

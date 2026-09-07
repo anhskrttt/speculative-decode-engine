@@ -3,11 +3,14 @@ import torch
 import matplotlib.pyplot as plt
 from datetime import datetime
 from engine import SpeculativeEngine
-
 import os
 import platform
+import argparse
+import textwrap
 
-from config import DEVICE
+from config import DEVICE, TARGET_MODEL_NAME, DRAFT_MODEL_NAME, TEMPERATURE, TOP_K, TOP_P
+
+PROMPT = "The rapid development of artificial intelligence has led to"
 
 def get_hardware_info():
     if torch.cuda.is_available() and DEVICE == "cuda":
@@ -17,7 +20,22 @@ def get_hardware_info():
 
     return f"CPU: {platform.processor()}"
 
-def run_gamma_experiment():
+
+
+def run_gamma_experiment(max_tokens: int, max_gamma: int):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    file_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    hardware = get_hardware_info()
+    
+    # metadata = (
+    #     f"Time: {timestamp}\n"
+    #     f"Hardware: {hardware}\n"
+    #     f"Target model: {TARGET_MODEL_NAME}\n"
+    #     f"Draft model: {DRAFT_MODEL_NAME}\n"
+    #     f"Generated tokens per run: {max_tokens}"
+    # )
+    
     print(f"\n{'='*60}")
     print(f" EXPERIMENT: Finding the Perfect Gamma")
     print(f"{'='*60}")
@@ -25,11 +43,11 @@ def run_gamma_experiment():
     engine = SpeculativeEngine()
     
     # We use a consistent prompt so the comparison is fair
-    prompt = "The rapid development of artificial intelligence has led to"
-    max_tokens = 40
+    # prompt = "The rapid development of artificial intelligence has led to"
+    # max_tokens = 40
     
     # Test different draft lengths
-    max_gamma = 50
+    # max_gamma = 20
     gammas = list(range(1, max_gamma + 1))
     
     speeds = []
@@ -44,7 +62,7 @@ def run_gamma_experiment():
         # Run the engine
         start_time = time.time()
         
-        _ = engine.generate(prompt, max_new_tokens=max_tokens, gamma=gamma)
+        _ = engine.generate(PROMPT, max_new_tokens=max_tokens, gamma=gamma)
         
         end_time = time.time()
         
@@ -84,7 +102,9 @@ def run_gamma_experiment():
     # plt.tight_layout()
     
     # Single graph
-    fig, ax_speed = plt.subplots(figsize=(10, 5))
+    # fig, ax_speed = plt.subplots(figsize=(10, 5))
+    fig, ax_speed = plt.subplots(figsize=(10, 6))
+    
 
     # Left y-axis: speed
     speed_line = ax_speed.plot(
@@ -113,16 +133,81 @@ def run_gamma_experiment():
     labels = [line.get_label() for line in lines]
     ax_speed.legend(lines, labels, loc="best")
 
-    plt.title("Speculative Decoding: Speed and Acceptance Rate vs. Gamma")
-    plt.tight_layout()
+    # plt.title("Speculative Decoding: Speed and Acceptance Rate vs. Gamma")
     
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    # fig.subplots_adjust(bottom=0.27, top=0.85)
+    
+    # fig.text(
+    #     0.5, 0.02,
+    #     metadata,
+    #     ha="center",
+    #     va="bottom",
+    #     fontsize=9,
+    #     bbox={
+    #         "boxstyle": "round,pad=0.5",
+    #         "facecolor": "#f5f5f5",
+    #         "edgecolor": "#cccccc",
+    #     },
+    # )
+    
+    # # TODO: FIXME. This runs for too long
+    # fig.text(
+    #     0.79, 0.5,          # x, y position in the whole figure
+    #     metadata,
+    #     ha="left",
+    #     va="center",
+    #     fontsize=9,
+    #     bbox={
+    #         "boxstyle": "round,pad=0.6",
+    #         "facecolor": "#f5f5f5",
+    #         "edgecolor": "#bdbdbd",
+    #     },
+    # )
+    fig.suptitle(
+        "Speculative Decoding: Speed and Acceptance Rate vs. Gamma",
+        fontsize=14,
+        fontweight="bold",
+        y=0.97,
+    )
+
+    metadata = (
+        f"Time: {timestamp}    •    "
+        f"Target: {TARGET_MODEL_NAME}    •    "
+        f"Draft: {DRAFT_MODEL_NAME}    •    "
+        f"Output tokens: {max_tokens}\n"
+        f"Hardware: {hardware}"
+    )
+
+    fig.text(
+        0.5, 0.90,
+        textwrap.fill(metadata, width=125),
+        ha="center",
+        va="top",
+        fontsize=9,
+        color="dimgray",
+        bbox={
+            "boxstyle": "round,pad=0.45",
+            "facecolor": "#f7f7f7",
+            "edgecolor": "#d0d0d0",
+        },
+    )
+
+    # Make room for the note above the axes.
+    fig.subplots_adjust(top=0.75)
+    
+    
+    # plt.tight_layout()
+    # fig.subplots_adjust(right=0.75, top=0.88)
+    
+    
+    # timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     os.makedirs("results", exist_ok=True)
     graph_path = f"results/gamma_analysis_{timestamp}.png"
     plt.savefig(graph_path)
+    # plt.savefig(graph_path, dpi=150, bbox_inches="tight")
     print(f"\n📊 Graph saved to: {graph_path}")
 
-    hardware = get_hardware_info()
+    # hardware = get_hardware_info()
 
     results_path = f"results/gamma_results_{timestamp}.csv"
     with open(results_path, "w", encoding="utf-8") as file:
@@ -138,4 +223,15 @@ def run_gamma_experiment():
     print(f"Raw results saved to: {results_path}")
 
 if __name__ == "__main__":
-    run_gamma_experiment()
+    parser = argparse.ArgumentParser(description="Run gamma sweep experiment")
+    parser.add_argument("--max-tokens", type=int, default=40, help="Maximum number of tokens to generate")
+    parser.add_argument("--max-gamma", type=int, default=20, help="Maximum gamma value to test")
+    args = parser.parse_args()
+    
+    if args.max_tokens <= 0:
+        parser.error("--max-tokens must be positive.")
+
+    if args.max_gamma <= 0:
+        parser.error("--max-gamma must be positive.")
+
+    run_gamma_experiment(max_tokens=args.max_tokens, max_gamma=args.max_gamma)
