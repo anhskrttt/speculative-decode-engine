@@ -17,16 +17,16 @@ DRAFT_MODEL_NAME  = "Qwen/Qwen2.5-0.5B"
 Supported models
 Draft Models (small, fast):
     facebook/opt-125m (125M params - 753MB) ⭐ Recommended
-    gpt2 (124M params)
-    distilgpt2 (82M params)
+    gpt2 (124M params - 5.63GB)
+    distilgpt2 (82M params - 3.16GB)
     Qwen/Qwen2.5-0.5B (0.5B params - 1,000MB)
     
 
 Target Models (large, accurate):
     facebook/opt-1.3b (1.3B params - 7.9GB) ⭐ Recommended for CPU
-    facebook/opt-2.7b (2.7B params)
-    gpt2-medium (355M params)
-    gpt2-large (774M params)
+    facebook/opt-2.7b (2.7B params - 21.2GB)
+    gpt2-medium (355M params - 12.5GB)
+    gpt2-large (774M params - 26.3GB)
     Qwen/Qwen2.5-1.5B (1.5B params - 3.1 GB)
     
 

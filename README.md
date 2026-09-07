@@ -37,8 +37,9 @@ Questions:
 | Intel(R) Core(TM) i5-8350U CPU @ 1.70GHz | opt-1.3b / 125m | Speculative |                  0.60 |                       … |      1.57× |              50% |  4 |
 | RTX 4090 | opt-1.3b / 125m |    Baseline |                  … |                       … |   1.00× |               N/A |  — |
 | RTX 4090 | opt-1.3b / 125m | Speculative |                  … |                       … |      …× |              …% |  4 |
-| RTX 5090 | Qwen2.5-1.5B / 0.5B |    Baseline |                  … |                       … |      …× |              N/A |  4 |
-| RTX 5090 | Qwen2.5-1.5B / 0.5B |    Speculative |                  … |                       … |      …× |              …% |  4 |
+| RTX 5090 | Qwen2.5-1.5B / 0.5B |    Baseline |                  10.98 |                       … |      1.0× |              N/A |  4 |
+| RTX 5090 | Qwen2.5-1.5B / 0.5B |    Speculative |                  7.28 |                       … |      0.66× |              …% |  4 |
+
 <!-- | RTX 4090 | Qwen2.5-1.5B / 0.5B |    Baseline |                  … |                       … |   1.00× |               — |  — |
 | RTX 4090 | Qwen2.5-1.5B / 0.5B | Speculative |                  … |                       … |      …× |              …% |  4 | -->
 
