@@ -30,18 +30,9 @@ Questions:
 
 
 ## Performance Benchmarks
+[Results](https://docs.google.com/spreadsheets/d/14b2Z0n4x0WGTn8ngUaHWemA8xh2Dzb-XaoCjBVBDvbA/edit?gid=167380152#gid=167380152)
 
-| Hardware      | Target / Draft pair |      Method | Throughput (tok/s) | Mean latency (ms/token) | Speedup | Acceptance rate |  γ |
-| -------- | ------------------- | ----------: | -----------------: | ----------------------: | ------: | --------------: | -: |
-| Intel(R) Core(TM) i5-8350U CPU @ 1.70GHz | opt-1.3b / 125m |    Baseline |                  0.38 |                       … |   1.00× |               N/A |  — |
-| Intel(R) Core(TM) i5-8350U CPU @ 1.70GHz | opt-1.3b / 125m | Speculative |                  0.60 |                       … |      1.57× |              50% |  4 |
-| RTX 4090 | opt-1.3b / 125m |    Baseline |                  … |                       … |   1.00× |               N/A |  — |
-| RTX 4090 | opt-1.3b / 125m | Speculative |                  … |                       … |      …× |              …% |  4 |
-| RTX 5090 | Qwen2.5-1.5B / 0.5B |    Baseline |                  10.98 |                       … |      1.0× |              N/A |  4 |
-| RTX 5090 | Qwen2.5-1.5B / 0.5B |    Speculative |                  7.28 |                       … |      0.66× |              …% |  4 |
-
-<!-- | RTX 4090 | Qwen2.5-1.5B / 0.5B |    Baseline |                  … |                       … |   1.00× |               — |  — |
-| RTX 4090 | Qwen2.5-1.5B / 0.5B | Speculative |                  … |                       … |      …× |              …% |  4 | -->
+![alt text](results/image.png)
 
 
 ## Performance Breakdown
