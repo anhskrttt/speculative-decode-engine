@@ -53,12 +53,6 @@ I tested on two different NVIDIA GPUs
 - NVIDIA GeForce RTX 4090, 24 GB VRAM
 - NVIDIA GeForce RTX 5090, 24 GB VRAM
 - Models (The draft and target models must share a tokenizer and vocabulary. Use models in the same family.)
-    <!-- - Draft:
-        - 
-        - 
-    - Target:
-        - 
-        -  -->
 
 ## Quick start
 
@@ -140,4 +134,4 @@ results/gamma_results.csv
 - Leviathan, Kalman, and Matias. [Fast Inference from Transformers via Speculative Decoding](https://arxiv.org/abs/2211.17192).
 - Chen et al. [Accelerating Large Language Model Decoding with Speculative Sampling](https://arxiv.org/abs/2302.01318).
 - Hugging Face. [Assisted Generation](https://huggingface.co/blog/assisted-generation).
-- The initial educational implementation was informed by [kunal51107/Speculative-decoding-engine](https://github.com/kunal51107/Speculative-decoding-engine). This repository extends that starting point with a testing on GPUs, profiling, and a gamma sweep.
+- The initial educational implementation was informed by [kunal51107/Speculative-decoding-engine](https://github.com/kunal51107/Speculative-decoding-engine). This repository extends that starting point with a testing on GPUs, profiling, and a gamma sweep for various model architectures.
