@@ -33,6 +33,8 @@ Questions:
 
 | Hardware      | Target / Draft pair |      Method | Throughput (tok/s) | Mean latency (ms/token) | Speedup | Acceptance rate |  γ |
 | -------- | ------------------- | ----------: | -----------------: | ----------------------: | ------: | --------------: | -: |
+| Intel(R) Core(TM) i5-8350U CPU @ 1.70GHz | opt-1.3b / 125m |    Baseline |                  0.38 |                       … |   1.00× |               N/A |  — |
+| Intel(R) Core(TM) i5-8350U CPU @ 1.70GHz | opt-1.3b / 125m | Speculative |                  0.60 |                       … |      1.57× |              50% |  4 |
 | RTX 4090 | opt-1.3b / 125m |    Baseline |                  … |                       … |   1.00× |               N/A |  — |
 | RTX 4090 | opt-1.3b / 125m | Speculative |                  … |                       … |      …× |              …% |  4 |
 | RTX 5090 | Qwen2.5-1.5B / 0.5B |    Baseline |                  … |                       … |      …× |              N/A |  4 |

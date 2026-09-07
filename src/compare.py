@@ -61,7 +61,7 @@ def run_race(prompts, max_new_tokens=40, gamma=4):
         })
 
     
-    prompt_labels = [f"Prompt {i + 1}" for i in range(len(results))]
+    prompt_labels = [f"{i + 1}" for i in range(len(results))]
     baseline_speeds = [r["base_speed"] for r in results]
     speculative_speeds = [r["spec_speed"] for r in results]
 
@@ -85,7 +85,7 @@ def run_race(prompts, max_new_tokens=40, gamma=4):
     )
 
     ax.set_title("Baseline vs. Speculative Decoding Speed")
-    ax.set_xlabel("Prompt")
+    ax.set_xlabel("Prompt Index")
     ax.set_ylabel("Generation speed (tokens/s)")
     ax.grid(True, alpha=0.3)
     ax.legend()
@@ -147,13 +147,13 @@ if __name__ == "__main__":
     prompts = [
             "The future of Artificial Intelligence is",
             "Once upon a time in a distant galaxy",
-            # "Python is a great programming language because",
-            # "The recipe for a perfect chocolate cake involves"
-            # "The most important lesson life has taught me is"
-            # "If I could travel anywhere in the world, I would go to"
-            # "The secret to happiness is"
-            # "Looking back at the last decade, the biggest change has been"
-            # "My favorite childhood memory is"
+            "Python is a great programming language because",
+            "The recipe for a perfect chocolate cake involves"
+            "The most important lesson life has taught me is"
+            "If I could travel anywhere in the world, I would go to"
+            "The secret to happiness is"
+            "Looking back at the last decade, the biggest change has been"
+            "My favorite childhood memory is"
     ]
     
     run_race(
