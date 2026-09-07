@@ -53,12 +53,12 @@ I tested on two different NVIDIA GPUs
 - NVIDIA GeForce RTX 4090, 24 GB VRAM
 - NVIDIA GeForce RTX 5090, 24 GB VRAM
 - Models (The draft and target models must share a tokenizer and vocabulary. Use models in the same family.)
-    - Draft:
+    <!-- - Draft:
         - 
         - 
     - Target:
         - 
-        - 
+        -  -->
 
 ## Quick start
 
