@@ -3,9 +3,15 @@ import torch
 
 # We use a large "Target" model and a small "Draft" model.
 # They MUST share the same tokenizer for this to work easily.
+
+# NOTE(anhduong): Recommended
 # TARGET_MODEL_NAME = "facebook/opt-1.3b" 
-TARGET_MODEL_NAME = "facebook/opt-1.3b" 
-DRAFT_MODEL_NAME  = "facebook/opt-125m"
+# DRAFT_MODEL_NAME  = "facebook/opt-125m"
+
+
+# NOTE(anhduong): This is for GPU with small mem (e.g. VRAM 8GB)
+TARGET_MODEL_NAME = "Qwen/Qwen2.5-1.5B" 
+DRAFT_MODEL_NAME  = "Qwen/Qwen2.5-0.5B"
 
 '''
 Supported models

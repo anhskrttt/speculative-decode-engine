@@ -90,7 +90,11 @@ class SpeculativeEngine:
         
         # TODO: Reassess this calculation 
         # 2. Start Timer
-        start_time = time.time()
+        if DEVICE == "cuda":
+            torch.cuda.synchronize()
+            start_time = time.perf_counter()
+        else:    
+            start_time = time.time()
         
         num_generated = 0
         original_input_len = input_ids.shape[1]
@@ -110,7 +114,11 @@ class SpeculativeEngine:
                 break
 
         # 3. Stop Timer
-        end_time = time.time()
+        if DEVICE == "cuda":
+            torch.cuda.synchronize()
+            end_time = time.perf_counter()
+        else:
+            end_time = time.time()
         
         # Calculate Speed
         actual_tokens_gen = input_ids.shape[1] - original_input_len

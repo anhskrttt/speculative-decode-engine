@@ -18,8 +18,13 @@ class BaselineGenerator:
     def generate(self, prompt, max_new_tokens=30):
         input_ids = self.tokenizer(prompt, return_tensors="pt").to(self.device).input_ids
         
-        start_time = time.time()
+        # start_time = time.time()
         
+        if DEVICE == "cuda":
+            torch.cuda.synchronize()
+            start_time = time.perf_counter()
+        else:    
+            start_time = time.time()
         
         for _ in range(max_new_tokens):
             with torch.no_grad():
@@ -34,7 +39,14 @@ class BaselineGenerator:
                 if next_token_id == self.tokenizer.eos_token_id:
                     break
         
-        end_time = time.time()
+        if DEVICE == "cuda":
+            torch.cuda.synchronize()
+            end_time = time.perf_counter()
+        else:
+            end_time = time.time()
+        
+        # end_time = time.time()
+        
         num_generated = input_ids.shape[1] - len(self.tokenizer(prompt).input_ids)
         speed = num_generated / (end_time - start_time)
         

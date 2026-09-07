@@ -148,12 +148,23 @@ if __name__ == "__main__":
             "The future of Artificial Intelligence is",
             "Once upon a time in a distant galaxy",
             "Python is a great programming language because",
-            "The recipe for a perfect chocolate cake involves"
-            "The most important lesson life has taught me is"
-            "If I could travel anywhere in the world, I would go to"
-            "The secret to happiness is"
-            "Looking back at the last decade, the biggest change has been"
-            "My favorite childhood memory is"
+            "The recipe for a perfect chocolate cake involves",
+            "The most important lesson life has taught me is",
+            "If I could travel anywhere in the world, I would go to",
+            "The secret to happiness is",
+            "Looking back at the last decade, the biggest change has been",
+            "My favorite childhood memory is",
+            "The next major breakthrough in renewable energy will be",
+            "Space exploration is vital for humanity because",
+            "The internet has changed the way we communicate by",
+            "The biggest ethical challenge facing AI developers is",
+            "Virtual reality will transform education by",
+            "The old, dusty book contained a map that led to",
+            "She woke up with the sudden ability to",
+            "The last dragon on Earth guarded a secret about",
+            "The abandoned mansion on the hill was rumored to be",
+            "A knock on the door at midnight changed everything when",
+            
     ]
     
     run_race(
